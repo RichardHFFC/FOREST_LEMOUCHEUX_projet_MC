@@ -122,7 +122,7 @@ int main(void)
   // mettre votre code en dessous
 	unsigned int pixel = 0;
 	/* variable local pour choix de la ligne*/ 
-	unsigned int ligne = 1;
+	/*unsigned int ligne = 1;*/
 
 
   /* USER CODE END 1 */
@@ -197,7 +197,7 @@ int main(void)
 				NVIC_DisableIRQ(TIM3_IRQn);
 			  /* copier la valeur du compteur de TIM17 (TIM17_CNT) dans le registre TIM3_ARR du TIMER TIM3 */
 			  // ecrire le code en dessous
-				TIM3->ARR = (TIM17->CNT)/181;
+				TIM3->ARR = (TIM17->CNT);
 			  /* mettre a zero le compteur de TIM3 */
 			  // ecrire le code en dessous
 				TIM3->CNT = 0;
@@ -226,9 +226,9 @@ int main(void)
 			timer3 = 0;
 		  /* realiser affichage d'une colonne */
 		  // ecrire le code en dessous
-			/*if (ligne == 1)   /* si ligne = 1  on affiche la ligne A*/
+			/*if (ligne == 1)    si ligne = 1  on affiche la ligne A*/
 				GPIOA->ODR &= Motif_Afficheur [pixel];
-			/*else	 /*sinon on affiche la ligne B*/
+			/*else	 sinon on affiche la ligne B*/
 				GPIOB->ODR &=(Motif_Afficheur [pixel]<<8);
 		  /* preparer pour l'affichage de la colonne suivante */
 		  // ecrire le code en dessous
