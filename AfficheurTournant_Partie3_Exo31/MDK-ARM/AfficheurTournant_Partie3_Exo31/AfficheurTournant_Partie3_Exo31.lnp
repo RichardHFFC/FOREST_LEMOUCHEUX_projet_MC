@@ -1,0 +1,25 @@
+--cpu Cortex-M0
+"afficheurtournant_partie3_exo31\startup_stm32f051x8.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_flash_ex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_pwr_ex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_tim.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_pwr.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_flash.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_rcc_ex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_cortex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_tim_ex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_i2c.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_gpio.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_i2c_ex.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_dma.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_rcc.o"
+"afficheurtournant_partie3_exo31\system_stm32f0xx.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_hal_msp.o"
+"afficheurtournant_partie3_exo31\stm32f0xx_it.o"
+"afficheurtournant_partie3_exo31\main.o"
+--library_type=microlib --strict --scatter "AfficheurTournant_Partie3_Exo31\AfficheurTournant_Partie3_Exo31.sct"
+
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "AfficheurTournant_Partie3_Exo31.map" -o AfficheurTournant_Partie3_Exo31\AfficheurTournant_Partie3_Exo31.axf
