@@ -170,9 +170,9 @@ int main(void)
         // ecrire le code en dessous
 		  pixel = 0;
 				/* changement d'état de la variable ligne*/
-			ligne =~(ligne^tour);				/* si ligne = 1 affichage ligne A, si ligne = 0 affichage ligne B*/
+			/*ligne =~(ligne^tour);*/				/* si ligne = 1 affichage ligne A, si ligne = 0 affichage ligne B*/
 
-		  if ((TIM17->CR1&(1<<0))==0) // test si le bit b0 de TIM17_CR1 n'est pas mis à 0
+		  if ((TIM17->CR1&(1<<0))==0) // test si le bit b0 de TIM17_CR1 est à 0
 		  {
 			  /*si oui alors demarrer le timer TIM17 : mettre à '1' le bit b0 de TIM17_CR1  */
               // ecrire le code en dessous
@@ -197,7 +197,7 @@ int main(void)
 				NVIC_DisableIRQ(TIM3_IRQn);
 			  /* copier la valeur du compteur de TIM17 (TIM17_CNT) dans le registre TIM3_ARR du TIMER TIM3 */
 			  // ecrire le code en dessous
-				TIM3->ARR = TIM17->CNT;
+				TIM3->ARR = (TIM17->CNT)/181;
 			  /* mettre a zero le compteur de TIM3 */
 			  // ecrire le code en dessous
 				TIM3->CNT = 0;
@@ -226,14 +226,10 @@ int main(void)
 			timer3 = 0;
 		  /* realiser affichage d'une colonne */
 		  // ecrire le code en dessous
-			if (ligne == 1)   /* si ligne = 1  on affiche la ligne A*/
-			{
+			/*if (ligne == 1)   /* si ligne = 1  on affiche la ligne A*/
 				GPIOA->ODR &= Motif_Afficheur [pixel];
-			}
-			else	/* sinon on affiche la ligne B*/
-			{
+			/*else	 /*sinon on affiche la ligne B*/
 				GPIOB->ODR &=(Motif_Afficheur [pixel]<<8);
-			}
 		  /* preparer pour l'affichage de la colonne suivante */
 		  // ecrire le code en dessous
 			GPIOB->ODR |= (0xFF00);	
@@ -327,7 +323,7 @@ static void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = PSC_TIM3;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 350-1;
+  htim3.Init.Period = 345;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
