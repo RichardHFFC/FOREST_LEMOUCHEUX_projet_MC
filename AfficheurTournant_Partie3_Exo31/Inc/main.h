@@ -48,8 +48,8 @@
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
-#define PSC_TIM17 47
-#define PSC_TIM3 180
+#define PSC_TIM17 8639
+#define PSC_TIM3 47
 
 #define LED1_Pin GPIO_PIN_0
 #define LED1_GPIO_Port GPIOA
