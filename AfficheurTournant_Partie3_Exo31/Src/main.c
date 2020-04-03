@@ -122,7 +122,7 @@ int main(void)
   // mettre votre code en dessous
 	unsigned int pixel = 0;
 	/* variable local pour choix de la ligne*/ 
-	/*unsigned int ligne = 1;*/
+	unsigned int ligne = 0;
 
 
   /* USER CODE END 1 */
@@ -164,57 +164,45 @@ int main(void)
 	  if (tour ==1) /* test si le drapeau interruption externe PA15 est a '1' */
 	  {
 	    /* reset du drapeau interruption externe PA15 pour synchroniser avec la routine d'interruption*/
-        // ecrire le code en dessous
-			tour = 0;
-        /*reset du compteur de colonne*/
-        // ecrire le code en dessous
-		  pixel = 0;
-				/* changement d'état de la variable ligne*/
-			/*ligne =~(ligne^tour);*/				/* si ligne = 1 affichage ligne A, si ligne = 0 affichage ligne B*/
-
+   		tour = 0;
+      /*reset du compteur de colonne*/
+      pixel = 0;
+			/* incrémentation de la variable ligne*/
+			ligne++;
 		  if ((TIM17->CR1&(1<<0))==0) // test si le bit b0 de TIM17_CR1 est à 0
 		  {
-			  /*si oui alors demarrer le timer TIM17 : mettre à '1' le bit b0 de TIM17_CR1  */
-              // ecrire le code en dessous
-			  TIM17->CR1 |= (1<<0);
-			  /* Demasquer la demande interruption du timer TIM17 : utiliser la fonction NVIC_EnableIRQ(Numero_IRQn) */
-			  // ecrire le code en dessous
+			 /*si oui alors demarrer le timer TIM17 : mettre à '1' le bit b0 de TIM17_CR1  */
+        TIM17->CR1 |= (1<<0);
+			 /* Demasquer la demande interruption du timer TIM17 : utiliser la fonction NVIC_EnableIRQ(Numero_IRQn) */
 				NVIC_EnableIRQ(TIM17_IRQn);
 		  }
 		  else    // si le TIMER TIM17 n'est pas arreter
 		  {
 			  /* arreter le timer TIM17 */
-              // ecrire le code en dessous
+        /* passer le bit b0 de TIM17 à 0*/
 			  TIM17->CR1 &=~(1<<0);
-             /* masquer sa demande interruption du TIM17 : utiliser la fonction NVIC_DisableIRQ(Numero_IRQn)*/
-             // ecrire le code en dessous
-			  NVIC_DisableIRQ(TIM17_IRQn);
+        /* masquer sa demande interruption du TIM17 : utiliser la fonction NVIC_DisableIRQ(Numero_IRQn)*/
+        NVIC_DisableIRQ(TIM17_IRQn);
 			  /* arreter le timer TIM3 */
-              // ecrire le code en dessous
+        /* passer le bit b0 de TIM3 à 0*/ 
 				TIM3->CR1 &=~(1<<0);
-			  /* masquer la demande interruption du Timer TIM3 : utiliser la fonction NVIC_EnableIRQ(Numero_IRQn)*/   /*?????*/
-			  // ecrire le code en dessous
+			  /* masquer la demande interruption du Timer TIM3 : utiliser la fonction NVIC_DisableIRQ(Numero_IRQn)*/
 				NVIC_DisableIRQ(TIM3_IRQn);
 			  /* copier la valeur du compteur de TIM17 (TIM17_CNT) dans le registre TIM3_ARR du TIMER TIM3 */
-			  // ecrire le code en dessous
 				TIM3->ARR = (TIM17->CNT);
 			  /* mettre a zero le compteur de TIM3 */
-			  // ecrire le code en dessous
 				TIM3->CNT = 0;
 			  /* Demarrer le Timer TIM3 */
-			  // ecrire le code en dessous
+			  /*passer le bit b0 de TIM3 à 1*/ 
 			  TIM3->CR1 |=(1<<0);
-			  /* Demasquer la demande interruption de TIM3 : utiliser la fonction NVIC_DisableIRQ(Numero_IRQn) */  /*?????*/
-			  // ecrire le code en dessous
+			  /* Demasquer la demande interruption de TIM3 : utiliser la fonction NVIC_EnableIRQ(Numero_IRQn) */
 				NVIC_EnableIRQ(TIM3_IRQn);
 			  /* mettre a zero le compteur de TIM17 */
-			  // ecrire le code ici
 				TIM17->CNT = 0;
 			  /* Demarrer le Timer TIM17 */
-			  // ecrire le code en dessous
+			  /* passer le bit b0 de TIM17 à 1*/
 				TIM17->CR1 |= (1<<0);
-			  /* Demasquer la demande interruption de TIM17 : utiliser la fonction NVIC_DisableIRQ(Numero_IRQn) */  /*?????*/
-			  // ecrire le code en dessous
+			  /* Demasquer la demande interruption de TIM17 : utiliser la fonction NVIC_EnableIRQ(Numero_IRQn) */
 			  NVIC_EnableIRQ(TIM17_IRQn);
 		  }
 	  }
@@ -222,16 +210,21 @@ int main(void)
 	  if (timer3 ==1) /* test si le drapeau interruption Timer duree Pixel a '1' : TIM3 */
 	  {
 		  /* remettre le drapeau interruption Timer dureePixel a '0' : TIM3 */
-		  // ecrire le code ici
 			timer3 = 0;
 		  /* realiser affichage d'une colonne */
-		  // ecrire le code en dessous
-			/*if (ligne == 1)    si ligne = 1  on affiche la ligne A*/
+			if (ligne <=32) /* si ligne <= 32 on affiche la ligne A*/
+			{
 				GPIOA->ODR &= Motif_Afficheur [pixel];
-			/*else	 sinon on affiche la ligne B*/
+			}
+			if((ligne>32)&&(ligne<=64)) /* si ligne compris entre 33 et 64 on affiche la ligne B*/
+			{
 				GPIOB->ODR &=(Motif_Afficheur [pixel]<<8);
+			}
+			if(ligne >64)
+			{
+				ligne = 0;
+			}
 		  /* preparer pour l'affichage de la colonne suivante */
-		  // ecrire le code en dessous
 			GPIOB->ODR |= (0xFF00);	
 			GPIOA->ODR |= (0x00FF);
 			pixel++;
@@ -240,22 +233,17 @@ int main(void)
 	  if (timer17==1) /* test si le drapeau interruption Timer duree tour complet vaut '1' : TIM17 */
 	  {
 		 
-		  /* remettre le drapeau interruption Timer dureePixel a '1' : TIM3 */    /*??????*/
-		  // ecrire le code en dessous
+		  /* remettre le drapeau interruption Timer dureePixel a '0' : TIM3 */
 			timer17 = 0;
-
-		  /* arreter le timer tim17 */  
-		  // ecrire le code en dessous
-			TIM17->CR1 &=~(1<<0);
-		  /* masquer la demande interruption du TIM17 */ /*??????*/
-		  // ecrire le code en dessous
+		  /* arreter le timer TIM17 */
+			/* passer le bit b0 de TIM17 à 0*/	
+		  TIM17->CR1 &=~(1<<0);
+		  /* masquer la demande interruption du TIM17 */
 			NVIC_DisableIRQ(TIM17_IRQn);
-		  /* arreter le timer tim17 */         /*??????*/
-		  // ecrire le code en dessous
+		  /* arreter le timer TIM3 */
+		  /* passer le bit b0 de TIM3 à 0*/
 			TIM3->CR1 &=~(1<<0);
-		 
-		 /* masquer la demande interruption du TIM17 */     /*???????*/
-		 // ecrire le code en dessous
+		 /* masquer la demande interruption du TIM17 */
 			NVIC_DisableIRQ(TIM3_IRQn);
 	  }
 
@@ -433,7 +421,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	if (GPIO_Pin==Fourche_Pin)  // Test si c'est la patte PA15 
 	{
 		/* Mettre a '1' le drapeau interruption externe de la Patte PA15 : fourche */
-		// ecrire le code en dessous
 		tour =1;
 	}
 }
@@ -450,14 +437,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM3)
 	{
 		/* Mettre a '1' le drapeau interruption duree pixel ou colonne : TIM3 */
-		// ecrire le code en dessous
 		timer3 = 1;
 	}
 
 	if (htim->Instance == TIM17)
 	{
 		/* Mettre a '1' le drapeau interruption duree tour complet : TIM17 */
-		// ecrire le code en dessous
 		timer17 = 1;
 	}
 }
